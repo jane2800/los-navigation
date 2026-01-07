@@ -52,13 +52,13 @@ module.exports = (pool) => {
   // Save a journey
   router.post('/journeys', async (req, res) => {
     try {
-      const { name, origin_id, origin_name, destination_id, destination_name, stopovers, userId } = req.body;
+      const { name, origin_id, origin_name, destination_id, destination_name, stopovers, legs, userId } = req.body;
 
       const result = await pool.query(
-        `INSERT INTO saved_journeys (name, origin_id, origin_name, destination_id, destination_name, stopovers, user_id)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO saved_journeys (name, origin_id, origin_name, destination_id, destination_name, stopovers, legs, user_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
-        [name, origin_id, origin_name, destination_id, destination_name, JSON.stringify(stopovers || []), userId || null]
+        [name, origin_id, origin_name, destination_id, destination_name, JSON.stringify(stopovers || []), JSON.stringify(legs || []), userId || null]
       );
 
       res.json(result.rows[0]);
@@ -71,13 +71,13 @@ module.exports = (pool) => {
   // Legacy route for saving
   router.post('/', async (req, res) => {
     try {
-      const { name, origin_id, origin_name, destination_id, destination_name, stopovers, userId } = req.body;
+      const { name, origin_id, origin_name, destination_id, destination_name, stopovers, legs, userId } = req.body;
 
       const result = await pool.query(
-        `INSERT INTO saved_journeys (name, origin_id, origin_name, destination_id, destination_name, stopovers, user_id)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO saved_journeys (name, origin_id, origin_name, destination_id, destination_name, stopovers, legs, user_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
-        [name, origin_id, origin_name, destination_id, destination_name, JSON.stringify(stopovers || []), userId || null]
+        [name, origin_id, origin_name, destination_id, destination_name, JSON.stringify(stopovers || []), JSON.stringify(legs || []), userId || null]
       );
 
       res.json(result.rows[0]);
@@ -139,7 +139,7 @@ module.exports = (pool) => {
   // Save a stop
   router.post('/stops', async (req, res) => {
     try {
-      const { stop_id, stop_name, userId } = req.body;
+      const { stop_id, stop_name, custom_name, userId } = req.body;
 
       if (!stop_id || !stop_name) {
         return res.status(400).json({ error: 'Stop ID and name are required' });
@@ -156,16 +156,38 @@ module.exports = (pool) => {
       }
 
       const result = await pool.query(
-        `INSERT INTO saved_stops (stop_id, stop_name, user_id)
-         VALUES ($1, $2, $3)
+        `INSERT INTO saved_stops (stop_id, stop_name, custom_name, user_id)
+         VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [stop_id, stop_name, userId || null]
+        [stop_id, stop_name, custom_name || null, userId || null]
       );
 
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Save stop error:', error);
       res.status(500).json({ error: 'Failed to save stop' });
+    }
+  });
+
+  // Update a saved stop (for custom name)
+  router.put('/stops/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { custom_name } = req.body;
+
+      const result = await pool.query(
+        `UPDATE saved_stops SET custom_name = $1 WHERE id = $2 RETURNING *`,
+        [custom_name || null, id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Stop not found' });
+      }
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Update stop error:', error);
+      res.status(500).json({ error: 'Failed to update stop' });
     }
   });
 

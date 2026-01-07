@@ -35,6 +35,10 @@ const strings = {
       stopoverDuration: 'Stay',
       durationMin: (mins) => `${mins} min`,
       durationHour: (hrs) => `${hrs} hr`,
+      saveStop: 'Save stop',
+      stopSaved: 'Saved!',
+      loginToSaveStop: 'Login to save stops',
+      savedStops: 'Saved Stops',
     },
 
     // Journey Planner
@@ -48,6 +52,9 @@ const strings = {
       done: 'Done',
       newSearch: 'New Search',
       startOver: 'Start Over',
+      saveToFavorites: 'Save to Favorites',
+      saved: 'Saved!',
+      loginToSave: 'Login to save journeys',
     },
 
     // Journey Progress
@@ -79,6 +86,15 @@ const strings = {
       noSavedStops: 'No saved stops',
       saveStopsHint: 'Save your favorite stops for quick access',
       via: 'via',
+      loginRequired: 'Please login to see your saved journeys and stops',
+      backToList: 'Back',
+      replanJourney: 'Replan',
+      deleteJourney: 'Delete',
+      addStop: 'Add Stop',
+      searchStopPlaceholder: 'Search for a stop...',
+      customNamePlaceholder: 'Custom name (optional)',
+      cancel: 'Cancel',
+      save: 'Save',
     },
 
     // Account
@@ -156,6 +172,10 @@ const strings = {
       stopoverDuration: 'Aufenthalt',
       durationMin: (mins) => `${mins} Min`,
       durationHour: (hrs) => `${hrs} Std`,
+      saveStop: 'Speichern',
+      stopSaved: 'Gespeichert!',
+      loginToSaveStop: 'Anmelden um Haltestellen zu speichern',
+      savedStops: 'Gespeicherte Haltestellen',
     },
 
     // Journey Planner
@@ -169,6 +189,9 @@ const strings = {
       done: 'Fertig',
       newSearch: 'Neue Suche',
       startOver: 'Von vorn',
+      saveToFavorites: 'Zu Favoriten hinzufügen',
+      saved: 'Gespeichert!',
+      loginToSave: 'Anmelden um Reisen zu speichern',
     },
 
     // Journey Progress
@@ -200,6 +223,15 @@ const strings = {
       noSavedStops: 'Keine gespeicherten Haltestellen',
       saveStopsHint: 'Speichere deine Lieblingshaltestellen für schnellen Zugriff',
       via: 'über',
+      loginRequired: 'Bitte anmelden, um gespeicherte Reisen und Haltestellen zu sehen',
+      backToList: 'Zurück',
+      replanJourney: 'Neu planen',
+      deleteJourney: 'Löschen',
+      addStop: 'Haltestelle hinzufügen',
+      searchStopPlaceholder: 'Haltestelle suchen...',
+      customNamePlaceholder: 'Eigener Name (optional)',
+      cancel: 'Abbrechen',
+      save: 'Speichern',
     },
 
     // Account

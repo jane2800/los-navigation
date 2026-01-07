@@ -96,6 +96,28 @@ async function initDB() {
           ALTER TABLE saved_journeys ADD COLUMN user_id INTEGER REFERENCES users(id) ON DELETE CASCADE;
         END IF;
       END $$;
+
+      -- Add legs column to saved_journeys if it doesn't exist
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name='saved_journeys' AND column_name='legs'
+        ) THEN 
+          ALTER TABLE saved_journeys ADD COLUMN legs JSONB DEFAULT '[]';
+        END IF;
+      END $$;
+
+      -- Add custom_name column to saved_stops if it doesn't exist
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name='saved_stops' AND column_name='custom_name'
+        ) THEN 
+          ALTER TABLE saved_stops ADD COLUMN custom_name VARCHAR(255);
+        END IF;
+      END $$;
     `);
     console.log('Database tables initialized');
   } catch (error) {

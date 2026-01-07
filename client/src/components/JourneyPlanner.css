@@ -178,6 +178,58 @@
   box-shadow: var(--shadow-glow);
 }
 
+/* Save Journey Button */
+.save-journey-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--bg-card);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.save-journey-btn:hover:not(:disabled) {
+  border-color: var(--bvg-yellow);
+  color: var(--bvg-yellow);
+  background: var(--bg-card-hover);
+}
+
+.save-journey-btn:disabled {
+  cursor: default;
+}
+
+.save-journey-btn.saved {
+  background: var(--sbahn-green);
+  border: 2px solid var(--sbahn-green);
+  color: white;
+}
+
+.save-journey-btn.saved svg {
+  fill: white;
+}
+
+.login-to-save-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
 @media (max-width: 600px) {
   .leg-header {
     flex-direction: column;

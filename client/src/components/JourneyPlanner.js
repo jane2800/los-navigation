@@ -5,7 +5,7 @@ import JourneyProgress from './JourneyProgress';
 import { useLanguage } from '../LanguageContext';
 import './JourneyPlanner.css';
 
-function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack }) {
+function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, user }) {
   const { strings } = useLanguage();
   const [currentLegIndex, setCurrentLegIndex] = useState(0);
   const [selectedLegs, setSelectedLegs] = useState([]);
@@ -17,6 +17,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack }) 
   const [intermediateStops, setIntermediateStops] = useState([]);
   const [journeyComplete, setJourneyComplete] = useState(false);
   const [lastArrivalTime, setLastArrivalTime] = useState(null);
+  const [saveStatus, setSaveStatus] = useState(null); // null, 'saving', 'saved'
 
   // Build the route including stopovers
   // Stopovers now have structure: [{ stop: {id, name}, duration: 15 }, ...]
@@ -250,6 +251,27 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack }) 
     onComplete();
   };
 
+  const handleSaveJourney = async () => {
+    if (!user) return;
+    
+    setSaveStatus('saving');
+    try {
+      await axios.post('/api/saved/journeys', {
+        origin_id: origin.id,
+        origin_name: origin.name,
+        destination_id: destination.id,
+        destination_name: destination.name,
+        stopovers: stopovers || [],
+        legs: selectedLegs, // Include the selected transport details
+        userId: user.id
+      });
+      setSaveStatus('saved');
+    } catch (err) {
+      console.error('Failed to save journey:', err);
+      setSaveStatus(null);
+    }
+  };
+
   if (journeyComplete) {
     return (
       <div className="journey-planner animate-fadeIn">
@@ -259,6 +281,38 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack }) 
           origin={origin}
           destination={destination}
         />
+        
+        {/* Save to Favorites - only shown when logged in */}
+        {user ? (
+          <button 
+            className={`save-journey-btn ${saveStatus === 'saved' ? 'saved' : ''}`}
+            onClick={handleSaveJourney}
+            disabled={saveStatus === 'saving' || saveStatus === 'saved'}
+          >
+            {saveStatus === 'saved' ? (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                {strings.journey.saved}
+              </>
+            ) : (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                {saveStatus === 'saving' ? '...' : strings.journey.saveToFavorites}
+              </>
+            )}
+          </button>
+        ) : (
+          <div className="login-to-save-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            {strings.journey.loginToSave}
+          </div>
+        )}
         
         <div className="journey-complete-actions">
           <button className="restart-btn" onClick={handleRestart}>

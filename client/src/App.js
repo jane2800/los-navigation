@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import Header from './components/Header';
 import SearchForm from './components/SearchForm';
@@ -12,6 +13,7 @@ function AppContent() {
   const [view, setView] = useState('search'); // 'search', 'journey', 'saved', 'account'
   const [journeyData, setJourneyData] = useState(null);
   const [user, setUser] = useState(null);
+  const [savedStops, setSavedStops] = useState([]);
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -24,6 +26,23 @@ function AppContent() {
       }
     }
   }, []);
+
+  // Fetch saved stops when user changes
+  useEffect(() => {
+    const fetchSavedStops = async () => {
+      if (!user) {
+        setSavedStops([]);
+        return;
+      }
+      try {
+        const response = await axios.get(`/api/saved/stops?userId=${user.id}`);
+        setSavedStops(response.data);
+      } catch (error) {
+        console.error('Failed to fetch saved stops:', error);
+      }
+    };
+    fetchSavedStops();
+  }, [user]);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -66,6 +85,16 @@ function AppContent() {
     // Could be enhanced to pre-fill the search form
   };
 
+  const refreshSavedStops = async () => {
+    if (!user) return;
+    try {
+      const response = await axios.get(`/api/saved/stops?userId=${user.id}`);
+      setSavedStops(response.data);
+    } catch (error) {
+      console.error('Failed to fetch saved stops:', error);
+    }
+  };
+
   return (
     <div className="app">
       <Header 
@@ -76,7 +105,7 @@ function AppContent() {
       
       <main className="main-content">
         {view === 'search' && (
-          <SearchForm onSearch={handleSearch} />
+          <SearchForm onSearch={handleSearch} user={user} savedStops={savedStops} />
         )}
         
         {view === 'journey' && journeyData && (
@@ -86,6 +115,7 @@ function AppContent() {
             stopovers={journeyData.stopovers}
             onComplete={handleJourneyComplete}
             onBack={handleBack}
+            user={user}
           />
         )}
         
@@ -93,6 +123,8 @@ function AppContent() {
           <SavedJourneys 
             onSelectJourney={handleSelectSaved}
             onSelectStop={handleSelectStop}
+            user={user}
+            onStopsChange={refreshSavedStops}
           />
         )}
         

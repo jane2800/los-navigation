@@ -4,7 +4,7 @@ import { useLanguage } from '../LanguageContext';
 import './Account.css';
 
 function Account({ user, onLogin, onLogout }) {
-  const { strings, language } = useLanguage();
+  const { strings } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -86,16 +86,6 @@ function Account({ user, onLogin, onLogout }) {
     } catch (err) {
       console.error('Failed to delete account:', err);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const locale = language === 'de' ? 'de-DE' : 'en-GB';
-    return date.toLocaleDateString(locale, {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
   };
 
   // Not logged in - show login/register form
@@ -202,9 +192,6 @@ function Account({ user, onLogin, onLogout }) {
           <div className="profile-info">
             <h2>{strings.account.welcome(user.username)}</h2>
             <p className="profile-email">{user.email}</p>
-            <p className="profile-date">
-              {strings.account.memberSince}: {formatDate(user.created_at)}
-            </p>
           </div>
         </div>
 
