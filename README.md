@@ -89,7 +89,7 @@ The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 
-## Usage
+## How to use:
 
 ### Planning a Journey
 
@@ -157,8 +157,6 @@ los/
 │   │   │   ├── journeys.js
 │   │   │   └── saved.js
 │   │   └── index.js
-│   ├── database/
-│   │   └── init.sql
 │   └── package.json
 ├── package.json
 └── README.md
@@ -175,15 +173,7 @@ The app uses Berlin's official transport colors:
 - **Ferry**: Blue (#0095DB)
 - **BVG Yellow**: (#F9D423)
 
-## License
-
-MIT License
-
-## Credits
+## References
 
 - BVG REST API: https://v6.bvg.transport.rest
-- Built for Berlin's amazing public transport system 🚇
 
-
-# los-navigation
-# los-navigation
