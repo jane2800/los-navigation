@@ -6,7 +6,7 @@ function TransportOptions({ options, onSelectTime }) {
   const { strings } = useLanguage();
   const [expandedOption, setExpandedOption] = useState(null);
 
-  const getProductColor = (product) => {
+  const getTransportColor = (product) => {
     const colors = {
       suburban: 'var(--sbahn-green)',
       subway: 'var(--ubahn-blue)',
@@ -40,10 +40,10 @@ function TransportOptions({ options, onSelectTime }) {
           <div 
             key={index} 
             className="transport-option"
-            style={{ '--product-color': getProductColor(option.product) }}
+            style={{ '--product-color': getTransportColor(option.product) }}
           >
             <div className="option-header">
-              <div className="line-badge" style={{ background: getProductColor(option.product) }}>
+              <div className="line-badge" style={{ background: getTransportColor(option.product) }}>
                 <span className="line-icon">{getProductIcon(option.product)}</span>
                 <span className="line-name">{option.line}</span>
               </div>

@@ -65,17 +65,6 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
-      -- Journey history table
-      CREATE TABLE IF NOT EXISTS journey_history (
-        id SERIAL PRIMARY KEY,
-        origin_id VARCHAR(255) NOT NULL,
-        origin_name VARCHAR(255) NOT NULL,
-        destination_id VARCHAR(255) NOT NULL,
-        destination_name VARCHAR(255) NOT NULL,
-        legs JSONB,
-        completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-
       -- Saved stops table (with optional user_id)
       CREATE TABLE IF NOT EXISTS saved_stops (
         id SERIAL PRIMARY KEY,

@@ -203,39 +203,5 @@ module.exports = (pool) => {
     }
   });
 
-  // ============ HISTORY (kept for backwards compatibility) ============
-
-  // Save journey history
-  router.post('/history', async (req, res) => {
-    try {
-      const { origin_id, origin_name, destination_id, destination_name, legs } = req.body;
-
-      const result = await pool.query(
-        `INSERT INTO journey_history (origin_id, origin_name, destination_id, destination_name, legs)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING *`,
-        [origin_id, origin_name, destination_id, destination_name, JSON.stringify(legs || [])]
-      );
-
-      res.json(result.rows[0]);
-    } catch (error) {
-      console.error('Save history error:', error);
-      res.status(500).json({ error: 'Failed to save history' });
-    }
-  });
-
-  // Get journey history
-  router.get('/history', async (req, res) => {
-    try {
-      const result = await pool.query(
-        'SELECT * FROM journey_history ORDER BY completed_at DESC LIMIT 20'
-      );
-      res.json(result.rows);
-    } catch (error) {
-      console.error('Get history error:', error);
-      res.status(500).json({ error: 'Failed to get history' });
-    }
-  });
-
   return router;
 };

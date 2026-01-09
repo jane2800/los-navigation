@@ -19,17 +19,6 @@ CREATE TABLE IF NOT EXISTS saved_journeys (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Journey history table
-CREATE TABLE IF NOT EXISTS journey_history (
-    id SERIAL PRIMARY KEY,
-    origin_id VARCHAR(255) NOT NULL,
-    origin_name VARCHAR(255) NOT NULL,
-    destination_id VARCHAR(255) NOT NULL,
-    destination_name VARCHAR(255) NOT NULL,
-    legs JSONB,
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Favorite stops table
 CREATE TABLE IF NOT EXISTS favorite_stops (
     id SERIAL PRIMARY KEY,
@@ -40,7 +29,6 @@ CREATE TABLE IF NOT EXISTS favorite_stops (
 
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_saved_journeys_created ON saved_journeys(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_journey_history_completed ON journey_history(completed_at DESC);
 CREATE INDEX IF NOT EXISTS idx_favorite_stops_stop_id ON favorite_stops(stop_id);
 
 -- Add sample data (optional)

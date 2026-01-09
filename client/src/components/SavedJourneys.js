@@ -159,30 +159,12 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
     }
   };
 
-  const getProductColor = (product) => {
-    const colors = {
-      suburban: 'var(--sbahn-green)',
-      subway: 'var(--ubahn-blue)',
-      tram: 'var(--tram-red)',
-      bus: 'var(--bus-purple)',
-      ferry: 'var(--ferry-blue)',
-      express: 'var(--regional-red)',
-      regional: 'var(--regional-red)'
-    };
-    return colors[product] || 'var(--text-muted)';
+  const getTransportColor = (product) => {
+    return strings.transportColors[product] || strings.transportColors.default;
   };
 
-  const getProductEmoji = (product) => {
-    const emojis = {
-      suburban: '🚈',
-      subway: '🚇',
-      tram: '🚊',
-      bus: '🚌',
-      ferry: '⛴️',
-      express: '🚄',
-      regional: '🚆'
-    };
-    return emojis[product] || '🚉';
+  const getTransportEmoji = (product) => {
+    return strings.transportEmojis[product] || strings.transportEmojis.default;
   };
 
   return (
@@ -195,7 +177,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
             onClick={() => setActiveTab('journeys')}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+              <path d={strings.productIcons.saved}/>
             </svg>
             {strings.saved.journeysTab}
           </button>
@@ -204,8 +186,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
             onClick={() => setActiveTab('stops')}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
+              <path d={strings.productIcons.pin}/> 
             </svg>
             {strings.saved.stopsTab}
           </button>
@@ -215,8 +196,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
       {!user ? (
         <div className="empty-state login-required">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d={strings.productIcons.account}/>
           </svg>
           <h3>{strings.saved.loginRequired}</h3>
         </div>
@@ -234,7 +214,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                 <div className="journey-detail-view">
                   <button className="back-to-list" onClick={() => setSelectedJourney(null)}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M19 12H5M12 19l-7-7 7-7"/>
+                      <path d={strings.productIcons.backArrow}/>
                     </svg>
                     {strings.saved.backToList}
                   </button>
@@ -255,8 +235,8 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                       <div key={index} className="leg-detail-card">
                         <div className="leg-detail-number">{index + 1}</div>
                         <div className="leg-detail-content">
-                          <div className="leg-detail-line" style={{ borderLeftColor: getProductColor(leg.product) }}>
-                            <span className="leg-emoji">{getProductEmoji(leg.product)}</span>
+                          <div className="leg-detail-line" style={{ borderLeftColor: getTransportColor(leg.product) }}>
+                            <span className="leg-emoji">{getTransportEmoji(leg.product)}</span>
                             <span className="leg-line-name">{leg.line}</span>
                             <span className="leg-direction">→ {leg.direction}</span>
                           </div>
@@ -310,7 +290,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
               ) : savedJourneys.length === 0 ? (
                 <div className="empty-state">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    <path d={strings.productIcons.saved}/>
                   </svg>
                   <h3>{strings.saved.noSavedJourneys}</h3>
                   <p>{strings.saved.saveRoutesHint}</p>
@@ -400,7 +380,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                           {stopSuggestions.map((stop) => (
                             <li key={stop.id} onClick={() => handleSelectStopToAdd(stop)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <path d={strings.productIcons.pin}/>
                                 <circle cx="12" cy="10" r="3"/>
                               </svg>
                               {stop.name}
@@ -416,7 +396,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                     <div className="stop-name-form">
                       <div className="selected-stop-info">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                          <path d={strings.productIcons.pin}/>
                           <circle cx="12" cy="10" r="3"/>
                         </svg>
                         <span>{selectedStop.name}</span>
@@ -443,7 +423,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
               {savedStops.length === 0 && !showAddStop ? (
                 <div className="empty-state">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <path d={strings.productIcons.pin}/>
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
                   <h3>{strings.saved.noSavedStops}</h3>
@@ -480,7 +460,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         <div className="stop-card-content">
                           <div className="stop-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                              <path d={strings.productIcons.pin}/>
                               <circle cx="12" cy="10" r="3"/>
                             </svg>
                           </div>

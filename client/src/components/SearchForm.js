@@ -154,7 +154,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
               {activeInput?.type === 'origin' ? (
                 <input
                   type="text"
-                  placeholder={strings.search.enterStartPlaceholder}
+                  placeholder={strings.search.enterStart}
                   value={searchQuery}
                   onChange={(e) => handleInputChange(e.target.value)}
                   autoFocus
@@ -178,7 +178,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
                 {activeInput?.type === 'stopover' && activeInput?.index === index ? (
                   <input
                     type="text"
-                    placeholder={strings.search.enterStopoverPlaceholder}
+                    placeholder={strings.search.enterStopover}
                     value={searchQuery}
                     onChange={(e) => handleInputChange(e.target.value)}
                     autoFocus
@@ -242,7 +242,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
               {activeInput?.type === 'destination' ? (
                 <input
                   type="text"
-                  placeholder={strings.search.enterDestinationPlaceholder}
+                  placeholder={strings.search.enterDestination}
                   value={searchQuery}
                   onChange={(e) => handleInputChange(e.target.value)}
                   autoFocus
@@ -273,7 +273,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
               <div className="saved-stops-section">
                 <div className="saved-stops-header">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    <path d={strings.productIcons.saved}/>
                   </svg>
                   {strings.search.savedStops}
                 </div>
@@ -323,7 +323,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
                           </svg>
                         ) : (
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                            <path d={strings.productIcons.saved}/>
                           </svg>
                         )}
                       </button>

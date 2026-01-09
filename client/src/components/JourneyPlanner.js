@@ -17,7 +17,8 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
   const [intermediateStops, setIntermediateStops] = useState([]);
   const [journeyComplete, setJourneyComplete] = useState(false);
   const [lastArrivalTime, setLastArrivalTime] = useState(null);
-  const [saveStatus, setSaveStatus] = useState(null); // null, 'saving', 'saved'
+  const [saveStatus, setSaveStatus] = useState(null); // null, 'saving', 'saved', 'unsaving'
+  const [savedJourneyId, setSavedJourneyId] = useState(null); // Track saved journey ID for unsaving
 
   // Build the route including stopovers
   // Stopovers now have structure: [{ stop: {id, name}, duration: 15 }, ...]
@@ -236,18 +237,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
     fetchLegOptions(fromStop, toStop, null);
   };
 
-  const handleDone = async () => {
-    try {
-      await axios.post('/api/saved/history', {
-        origin_id: origin.id,
-        origin_name: origin.name,
-        destination_id: destination.id,
-        destination_name: destination.name,
-        legs: selectedLegs
-      });
-    } catch (err) {
-      console.error('Failed to save history:', err);
-    }
+  const handleDone = () => {
     onComplete();
   };
 
@@ -256,7 +246,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
     
     setSaveStatus('saving');
     try {
-      await axios.post('/api/saved/journeys', {
+      const response = await axios.post('/api/saved/journeys', {
         origin_id: origin.id,
         origin_name: origin.name,
         destination_id: destination.id,
@@ -265,10 +255,33 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         legs: selectedLegs, // Include the selected transport details
         userId: user.id
       });
+      setSavedJourneyId(response.data.id); // Store the saved journey ID
       setSaveStatus('saved');
     } catch (err) {
       console.error('Failed to save journey:', err);
       setSaveStatus(null);
+    }
+  };
+
+  const handleUnsaveJourney = async () => {
+    if (!user || !savedJourneyId) return;
+    
+    setSaveStatus('unsaving');
+    try {
+      await axios.delete(`/api/saved/journeys/${savedJourneyId}`);
+      setSavedJourneyId(null);
+      setSaveStatus(null); // Back to initial state
+    } catch (err) {
+      console.error('Failed to unsave journey:', err);
+      setSaveStatus('saved'); // Revert to saved state on error
+    }
+  };
+
+  const handleToggleSave = () => {
+    if (saveStatus === 'saved') {
+      handleUnsaveJourney();
+    } else if (!saveStatus || saveStatus === null) {
+      handleSaveJourney();
     }
   };
 
@@ -286,46 +299,56 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         {user ? (
           <button 
             className={`save-journey-btn ${saveStatus === 'saved' ? 'saved' : ''}`}
-            onClick={handleSaveJourney}
-            disabled={saveStatus === 'saving' || saveStatus === 'saved'}
+            onClick={handleToggleSave}
+            disabled={saveStatus === 'saving' || saveStatus === 'unsaving'}
           >
-            {saveStatus === 'saved' ? (
-              <>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
+            {/* Toggle between save/unsave states */}
+            {saveStatus === 'saved' ? ( 
+              <> 
+                {/* Show "Saved" with filled icon - click to unsave */}
                 {strings.journey.saved}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
+                  <path d={strings.productIcons.saved}/>
+                </svg>
+              </>
+            ) : saveStatus === 'unsaving' ? (
+              <>
+                {/* Show loading state while unsaving */}
+                {strings.journey.removing || '...'}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d={strings.productIcons.saved}/>
+                </svg>
               </>
             ) : (
               <>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
+                {/* Shows "Save to Favorites" button to add to saved */}
                 {saveStatus === 'saving' ? '...' : strings.journey.saveToFavorites}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d={strings.productIcons.saved}/>
+                </svg>
               </>
             )}
           </button>
         ) : (
           <div className="login-to-save-hint">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
             {strings.journey.loginToSave}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d={strings.productIcons.saved}/>
+            </svg>
           </div>
         )}
         
         <div className="journey-complete-actions">
           <button className="restart-btn" onClick={handleRestart}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M1 4v6h6M23 20v-6h-6"/>
-              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-            </svg>
             {strings.journey.planAgain}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d={strings.productIcons.reload}/>
+            </svg>
           </button>
           <button className="done-btn" onClick={handleDone}>
             {strings.journey.done}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="20 6 9 17 4 12"/>
+              <polyline points={strings.productIcons.checkMark}/>
             </svg>
           </button>
         </div>
@@ -370,8 +393,8 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         {error && (
           <div className="transport-error">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
+              <circle cx="12" cy="12" r="10"/> 
+              <line x1="12" y1="8" x2="12" y2="12"/> 
               <line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
             <span>{error}</span>
@@ -393,7 +416,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
       <div className="journey-actions">
         <button className="back-journey-btn" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
+            <path d={strings.productIcons.backArrow}/>
           </svg>
           {strings.journey.newSearch}
         </button>
@@ -401,8 +424,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         {selectedLegs.length > 0 && (
           <button className="restart-journey-btn" onClick={handleRestart}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M1 4v6h6"/>
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+              <path d={strings.productIcons.reload}/>
             </svg>
             {strings.journey.startOver}
           </button>

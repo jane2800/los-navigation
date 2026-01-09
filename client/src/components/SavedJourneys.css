@@ -166,14 +166,6 @@
   color: var(--tram-red);
 }
 
-.history-card {
-  cursor: pointer;
-}
-
-.history-card .delete-btn {
-  display: none;
-}
-
 .empty-state {
   display: flex;
   flex-direction: column;

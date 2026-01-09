@@ -5,8 +5,8 @@ import './JourneyProgress.css';
 function JourneyProgress({ legs, isComplete, origin, destination, onEditLeg }) {
   const { strings } = useLanguage();
 
-  const getProductEmoji = (product) => {
-    return strings.productEmojis[product] || strings.productEmojis.default;
+  const getTransportEmoji = (product) => {
+    return strings.transportEmojis[product] || strings.transportEmojis.default;
   };
 
   const getTotalDuration = () => {
@@ -48,7 +48,7 @@ function JourneyProgress({ legs, isComplete, origin, destination, onEditLeg }) {
             <div className="leg-number">{index + 1}</div>
             <div className="leg-details">
               <div className="leg-line">
-                <span className="leg-emoji">{getProductEmoji(leg.product)}</span>
+                <span className="leg-emoji">{getTransportEmoji(leg.product)}</span>
                 <span className="leg-line-name">{leg.line}</span>
               </div>
               <div className="leg-route">

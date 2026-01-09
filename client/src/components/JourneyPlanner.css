@@ -211,6 +211,14 @@
   background: var(--sbahn-green);
   border: 2px solid var(--sbahn-green);
   color: white;
+  cursor: pointer;
+}
+
+.save-journey-btn.saved:hover {
+  /* No hover effect - keeps the same saved appearance */
+  background: var(--sbahn-green);
+  border-color: var(--text-primary);
+  color: white;
 }
 
 .save-journey-btn.saved svg {

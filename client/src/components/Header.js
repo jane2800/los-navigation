@@ -18,7 +18,6 @@ function Header({ view, onViewChange, onBack }) {
           {onBack ? (
             <button className="back-button" onClick={onBack}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
               </svg>
             </button>
           ) : (
@@ -27,7 +26,7 @@ function Header({ view, onViewChange, onBack }) {
               onClick={() => onViewChange('saved')}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                <path d={strings.productIcons.saved}/> 
               </svg>
               {strings.header.saved}
             </button>
@@ -49,7 +48,7 @@ function Header({ view, onViewChange, onBack }) {
               <span className="lang-flag">{LANGUAGES[language].flag}</span>
               <span className="lang-code">{language.toUpperCase()}</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 12 15 18 9"/>
+                <polyline points={strings.productIcons.downArrow}/> // Down arrow
               </svg>
             </button>
             
@@ -74,8 +73,7 @@ function Header({ view, onViewChange, onBack }) {
             onClick={() => onViewChange('account')}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
+              <path d={strings.productIcons.account}/> // User icon
             </svg>
             {strings.header.account}
           </button>
