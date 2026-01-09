@@ -78,12 +78,6 @@ function AppContent() {
     setView('journey');
   };
 
-  const handleSelectStop = (stop) => {
-    // When selecting a saved stop, use it as the origin in search
-    setView('search');
-    // Could be enhanced to pre-fill the search form
-  };
-
   const refreshSavedStops = async () => {
     if (!user) return;
     try {
@@ -121,7 +115,6 @@ function AppContent() {
         {view === 'saved' && (
           <SavedJourneys 
             onSelectJourney={handleSelectSaved}
-            onSelectStop={handleSelectStop}
             user={user}
             onStopsChange={refreshSavedStops}
           />

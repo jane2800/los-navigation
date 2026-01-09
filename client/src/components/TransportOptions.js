@@ -7,16 +7,7 @@ function TransportOptions({ options, onSelectTime }) {
   const [expandedOption, setExpandedOption] = useState(null);
 
   const getTransportColor = (product) => {
-    const colors = {
-      suburban: 'var(--sbahn-green)',
-      subway: 'var(--ubahn-blue)',
-      tram: 'var(--tram-red)',
-      bus: 'var(--bus-purple)',
-      ferry: 'var(--ferry-blue)',
-      express: 'var(--regional-red)',
-      regional: 'var(--regional-red)'
-    };
-    return colors[product] || 'var(--text-muted)';
+    return strings.transportColors[product] || strings.transportColors.default;
   };
 
   const getProductIcon = (product) => {

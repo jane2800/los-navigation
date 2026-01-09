@@ -292,8 +292,6 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         <JourneyProgress 
           legs={selectedLegs} 
           isComplete={true}
-          origin={origin}
-          destination={destination}
         />
         
         {/* Save to Favorites - only shown when logged in */}
@@ -352,8 +350,6 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         <JourneyProgress 
           legs={selectedLegs} 
           isComplete={false}
-          origin={origin}
-          destination={destination}
           onEditLeg={handleEditLeg}
         />
       )}

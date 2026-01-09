@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../LanguageContext';
 import './JourneyProgress.css';
 
-function JourneyProgress({ legs, isComplete, origin, destination, onEditLeg }) {
+function JourneyProgress({ legs, isComplete, onEditLeg }) {
   const { strings } = useLanguage();
 
   const getTransportEmoji = (product) => {

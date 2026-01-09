@@ -66,45 +66,7 @@ module.exports = (pool, BVG_API) => {
       res.status(500).json({ error: 'Failed to get departures' });
     }
   });
-
-  // Get favorite stops
-  router.get('/favorites/list', async (req, res) => {
-    try {
-      const result = await pool.query('SELECT * FROM favorite_stops ORDER BY created_at DESC');
-      res.json(result.rows);
-    } catch (error) {
-      console.error('Favorites error:', error);
-      res.status(500).json({ error: 'Failed to get favorites' });
-    }
-  });
-
-  // Add favorite stop
-  router.post('/favorites', async (req, res) => {
-    try {
-      const { stop_id, stop_name } = req.body;
-      const result = await pool.query(
-        'INSERT INTO favorite_stops (stop_id, stop_name) VALUES ($1, $2) ON CONFLICT (stop_id) DO NOTHING RETURNING *',
-        [stop_id, stop_name]
-      );
-      res.json(result.rows[0] || { message: 'Already favorited' });
-    } catch (error) {
-      console.error('Add favorite error:', error);
-      res.status(500).json({ error: 'Failed to add favorite' });
-    }
-  });
-
-  // Remove favorite stop
-  router.delete('/favorites/:stopId', async (req, res) => {
-    try {
-      const { stopId } = req.params;
-      await pool.query('DELETE FROM favorite_stops WHERE stop_id = $1', [stopId]);
-      res.json({ message: 'Favorite removed' });
-    } catch (error) {
-      console.error('Remove favorite error:', error);
-      res.status(500).json({ error: 'Failed to remove favorite' });
-    }
-  });
-
+  
   return router;
 };
 

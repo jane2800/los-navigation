@@ -4,7 +4,7 @@ import { useLanguage } from '../LanguageContext';
 import './SavedJourneys.css';
 import { BsTrash, BsGeoAlt, BsPencilSquare, BsCheck, BsX, BsPlus, BsBookmark, BsPersonCircle, BsArrowLeft, BsArrowRight, BsArrowCounterclockwise, BsMap} from "react-icons/bs";
 
-function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
+function SavedJourneys({ onSelectJourney, user, onStopsChange }) {
   const { strings } = useLanguage();
   const [savedJourneys, setSavedJourneys] = useState([]);
   const [savedStops, setSavedStops] = useState([]);
