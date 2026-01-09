@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage, LANGUAGES } from '../LanguageContext';
 import './Header.css';
+import { BsBookmark, BsArrowDownShort, BsPerson, BsArrowLeft } from 'react-icons/bs';
 
 function Header({ view, onViewChange, onBack }) {
   const { strings, language, setLanguage } = useLanguage();
@@ -17,17 +18,14 @@ function Header({ view, onViewChange, onBack }) {
         <div className="header-left">
           {onBack ? (
             <button className="back-button" onClick={onBack}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              </svg>
+              <BsArrowLeft size={20} />
             </button>
           ) : (
             <button 
               className={`nav-button ${view === 'saved' ? 'active' : ''}`}
               onClick={() => onViewChange('saved')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d={strings.productIcons.saved}/> 
-              </svg>
+              <BsBookmark size={18}/>
               {strings.header.saved}
             </button>
           )}
@@ -47,9 +45,7 @@ function Header({ view, onViewChange, onBack }) {
             >
               <span className="lang-flag">{LANGUAGES[language].flag}</span>
               <span className="lang-code">{language.toUpperCase()}</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points={strings.productIcons.downArrow}/> // Down arrow
-              </svg>
+              <BsArrowDownShort size={18} />
             </button>
             
             {showLangMenu && (
@@ -72,9 +68,7 @@ function Header({ view, onViewChange, onBack }) {
             className={`nav-button ${view === 'account' ? 'active' : ''}`}
             onClick={() => onViewChange('account')}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.account}/> // User icon
-            </svg>
+            <BsPerson size={20}/>
             {strings.header.account}
           </button>
         </div>

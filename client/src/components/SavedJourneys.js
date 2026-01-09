@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLanguage } from '../LanguageContext';
 import './SavedJourneys.css';
+import { BsTrash, BsGeoAlt, BsPencilSquare, BsCheck, BsX, BsPlus, BsBookmark, BsPersonCircle, BsArrowLeft, BsArrowRight, BsArrowCounterclockwise, BsMap} from "react-icons/bs";
 
 function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
   const { strings } = useLanguage();
@@ -176,18 +177,14 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
             className={`tab ${activeTab === 'journeys' ? 'active' : ''}`}
             onClick={() => setActiveTab('journeys')}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.saved}/>
-            </svg>
+            <BsMap size={18}/>
             {strings.saved.journeysTab}
           </button>
           <button 
             className={`tab ${activeTab === 'stops' ? 'active' : ''}`}
             onClick={() => setActiveTab('stops')}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.pin}/> 
-            </svg>
+            <BsGeoAlt size={18}/>
             {strings.saved.stopsTab}
           </button>
         </div>
@@ -195,9 +192,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
 
       {!user ? (
         <div className="empty-state login-required">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d={strings.productIcons.account}/>
-          </svg>
+          <BsPersonCircle size={48}/>
           <h3>{strings.saved.loginRequired}</h3>
         </div>
       ) : loading ? (
@@ -213,19 +208,14 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
               {selectedJourney ? (
                 <div className="journey-detail-view">
                   <button className="back-to-list" onClick={() => setSelectedJourney(null)}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d={strings.productIcons.backArrow}/>
-                    </svg>
+                    <BsArrowLeft size={18}/>
                     {strings.saved.backToList}
                   </button>
                   
                   <div className="journey-detail-header">
                     <div className="journey-route-detail">
                       <span className="route-origin">{selectedJourney.origin_name}</span>
-                      <svg className="route-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                      </svg>
+                      <BsArrowRight size={16} className="route-arrow"/>
                       <span className="route-destination">{selectedJourney.destination_name}</span>
                     </div>
                   </div>
@@ -266,10 +256,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         onSelectJourney(selectedJourney);
                       }}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 4v6h6"/>
-                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                      </svg>
+                      <BsArrowCounterclockwise size={18}/>
                       {strings.saved.replanJourney}
                     </button>
                     <button 
@@ -279,19 +266,13 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         setSelectedJourney(null);
                       }}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                      </svg>
-                      {strings.saved.deleteJourney}
+                      <BsTrash size={18}/>
                     </button>
                   </div>
                 </div>
               ) : savedJourneys.length === 0 ? (
                 <div className="empty-state">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d={strings.productIcons.saved}/>
-                  </svg>
+                  <BsBookmark size={48}/>
                   <h3>{strings.saved.noSavedJourneys}</h3>
                   <p>{strings.saved.saveRoutesHint}</p>
                 </div>
@@ -301,10 +282,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                     <div className="journey-card-content" onClick={() => handleJourneyClick(journey)}>
                       <div className="journey-route">
                         <span className="route-origin">{journey.origin_name}</span>
-                        <svg className="route-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <line x1="5" y1="12" x2="19" y2="12"/>
-                          <polyline points="12 5 19 12 12 19"/>
-                        </svg>
+                        <BsArrowRight size={16} className="route-arrow"/>
                         <span className="route-destination">{journey.destination_name}</span>
                       </div>
                       {journey.name && (
@@ -328,10 +306,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         handleDeleteJourney(journey.id);
                       }}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                      </svg>
+                      <BsTrash size={18}/>
                     </button>
                   </div>
                 ))
@@ -344,10 +319,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
               {/* Add Stop Button/Form */}
               {!showAddStop ? (
                 <button className="add-stop-btn" onClick={() => setShowAddStop(true)}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
+                  <BsPlus size={18}/>
                   {strings.saved.addStop}
                 </button>
               ) : (
@@ -363,10 +335,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                           autoFocus
                         />
                         <button className="cancel-search-btn" onClick={handleCancelAddStop}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                          </svg>
+                          <BsX size={18}/>
                         </button>
                       </div>
                       {searchingStops && (
@@ -379,10 +348,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         <ul className="stop-suggestions">
                           {stopSuggestions.map((stop) => (
                             <li key={stop.id} onClick={() => handleSelectStopToAdd(stop)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d={strings.productIcons.pin}/>
-                                <circle cx="12" cy="10" r="3"/>
-                              </svg>
+                              <BsGeoAlt size={18}/>
                               {stop.name}
                             </li>
                           ))}
@@ -395,10 +361,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                   ) : (
                     <div className="stop-name-form">
                       <div className="selected-stop-info">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d={strings.productIcons.pin}/>
-                          <circle cx="12" cy="10" r="3"/>
-                        </svg>
+                        <BsGeoAlt size={18}/>
                         <span>{selectedStop.name}</span>
                       </div>
                       <input
@@ -422,10 +385,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
 
               {savedStops.length === 0 && !showAddStop ? (
                 <div className="empty-state">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d={strings.productIcons.pin}/>
-                    <circle cx="12" cy="10" r="3"/>
-                  </svg>
+                  <BsGeoAlt size={48}/>
                   <h3>{strings.saved.noSavedStops}</h3>
                   <p>{strings.saved.saveStopsHint}</p>
                 </div>
@@ -443,15 +403,10 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                         />
                         <div className="stop-edit-actions">
                           <button className="cancel-edit-btn" onClick={handleCancelEditStop}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <line x1="18" y1="6" x2="6" y2="18"/>
-                              <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
+                            <BsX size={20}/>
                           </button>
                           <button className="save-edit-btn" onClick={() => handleSaveEditStop(stop.id)}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <polyline points="20 6 9 17 4 12"/>
-                            </svg>
+                            <BsCheck size={20}/>
                           </button>
                         </div>
                       </div>
@@ -459,10 +414,7 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                       <>
                         <div className="stop-card-content">
                           <div className="stop-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d={strings.productIcons.pin}/>
-                              <circle cx="12" cy="10" r="3"/>
-                            </svg>
+                            <BsGeoAlt size={18}/>
                           </div>
                           <div className="stop-info">
                             {stop.custom_name && (
@@ -477,19 +429,13 @@ function SavedJourneys({ onSelectJourney, onSelectStop, user, onStopsChange }) {
                           className="edit-btn"
                           onClick={() => handleStartEditStop(stop)}
                         >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                          </svg>
+                          <BsPencilSquare size={18}/>
                         </button>
                         <button 
                           className="delete-btn"
                           onClick={() => handleDeleteStop(stop.id)}
                         >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                          </svg>
+                          <BsTrash size={18}/>
                         </button>
                       </>
                     )}

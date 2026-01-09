@@ -9,7 +9,6 @@ import Account from './components/Account';
 import './App.css';
 
 function AppContent() {
-  const { strings } = useLanguage();
   const [view, setView] = useState('search'); // 'search', 'journey', 'saved', 'account'
   const [journeyData, setJourneyData] = useState(null);
   const [user, setUser] = useState(null);
@@ -105,7 +104,7 @@ function AppContent() {
       
       <main className="main-content">
         {view === 'search' && (
-          <SearchForm onSearch={handleSearch} user={user} savedStops={savedStops} />
+          <SearchForm onSearch={handleSearch} user={user} savedStops={savedStops} onStopsChange={refreshSavedStops} />
         )}
         
         {view === 'journey' && journeyData && (

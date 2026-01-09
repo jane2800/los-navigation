@@ -4,6 +4,7 @@ import TransportOptions from './TransportOptions';
 import JourneyProgress from './JourneyProgress';
 import { useLanguage } from '../LanguageContext';
 import './JourneyPlanner.css';
+import { BsArrowCounterclockwise, BsArrowRight, BsBookmark, BsBookmarkFill, BsArrowLeft, BsCheckLg } from 'react-icons/bs';
 
 function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, user }) {
   const { strings } = useLanguage();
@@ -307,49 +308,37 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
               <> 
                 {/* Show "Saved" with filled icon - click to unsave */}
                 {strings.journey.saved}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
-                  <path d={strings.productIcons.saved}/>
-                </svg>
+                <BsBookmarkFill size={20} />
               </>
             ) : saveStatus === 'unsaving' ? (
               <>
                 {/* Show loading state while unsaving */}
                 {strings.journey.removing || '...'}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d={strings.productIcons.saved}/>
-                </svg>
+                <BsBookmarkFill size={20} />
               </>
             ) : (
               <>
                 {/* Shows "Save to Favorites" button to add to saved */}
                 {saveStatus === 'saving' ? '...' : strings.journey.saveToFavorites}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d={strings.productIcons.saved}/>
-                </svg>
+                <BsBookmark size={20} />
               </>
             )}
           </button>
         ) : (
           <div className="login-to-save-hint">
             {strings.journey.loginToSave}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.saved}/>
-            </svg>
+            <BsBookmark size={16} />
           </div>
         )}
         
         <div className="journey-complete-actions">
           <button className="restart-btn" onClick={handleRestart}>
             {strings.journey.planAgain}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.reload}/>
-            </svg>
+            <BsArrowCounterclockwise size={20} />
           </button>
           <button className="done-btn" onClick={handleDone}>
             {strings.journey.done}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points={strings.productIcons.checkMark}/>
-            </svg>
+            <BsCheckLg size={20} />
           </button>
         </div>
       </div>
@@ -375,10 +364,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
           <div className="leg-number">{currentLegIndex + 1}</div>
           <div className="leg-route">
             <span className="leg-from">{currentFrom?.name}</span>
-            <svg className="leg-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
+            <BsArrowRight size={16}/>
             <span className="leg-to">{currentTo?.name || strings.journey.loading}</span>
           </div>
         </div>
@@ -392,11 +378,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
 
         {error && (
           <div className="transport-error">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/> 
-              <line x1="12" y1="8" x2="12" y2="12"/> 
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
+            <BsExclamationCricleFill size={24} color="#e74c3c" />
             <span>{error}</span>
             <button onClick={() => fetchLegOptions(currentFrom, currentTo, lastArrivalTime)}>
               {strings.journey.retry}
@@ -415,18 +397,12 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
       {/* Footer Actions */}
       <div className="journey-actions">
         <button className="back-journey-btn" onClick={onBack}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d={strings.productIcons.backArrow}/>
-          </svg>
-          {strings.journey.newSearch}
+          <BsArrowLeft size={20} />
         </button>
         
         {selectedLegs.length > 0 && (
           <button className="restart-journey-btn" onClick={handleRestart}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d={strings.productIcons.reload}/>
-            </svg>
-            {strings.journey.startOver}
+            <BsArrowCounterclockwise size={20} />
           </button>
         )}
       </div>

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLanguage } from '../LanguageContext';
 import './SearchForm.css';
+import { BsPlus, BsArrowDownUp, BsXLg, BsBookmark, BsBookmarkFill, BsSearch} from 'react-icons/bs';
 
-function SearchForm({ onSearch, user, savedStops = [] }) {
+function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
   const { strings } = useLanguage();
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -12,8 +13,12 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [savedStopId, setSavedStopId] = useState(null); // Track which stop was just saved
   const searchTimeout = useRef(null);
+
+  // Check if a stop is saved
+  const isStopSaved = (stopId) => {
+    return savedStops.some(s => s.stop_id === stopId);
+  };
 
   // Filter saved stops based on search query
   const filteredSavedStops = searchQuery.length >= 1 
@@ -109,17 +114,24 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
     e.stopPropagation(); // Prevent selecting the stop
     if (!user) return;
 
+    const alreadySaved = savedStops.find(s => s.stop_id === stop.id);
+
     try {
-      await axios.post('/api/saved/stops', {
-        stop_id: stop.id,
-        stop_name: stop.name,
-        userId: user.id
-      });
-      setSavedStopId(stop.id);
-      // Reset after 2 seconds
-      setTimeout(() => setSavedStopId(null), 2000);
+      if (alreadySaved) {
+        // Unsave
+        await axios.delete(`/api/saved/stops/${alreadySaved.id}`);
+      } else {
+        // Save
+        await axios.post('/api/saved/stops', {
+          stop_id: stop.id,
+          stop_name: stop.name,
+          userId: user.id
+        });
+      }
+      // Refresh saved stops from parent
+      if (onStopsChange) onStopsChange();
     } catch (err) {
-      console.error('Failed to save stop:', err);
+      console.error('Failed to save/unsave stop:', err);
     }
   };
 
@@ -211,10 +223,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
                 className="remove-stopover"
                 onClick={() => handleRemoveStopover(index)}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+                <BsXLg size={14}/>
               </button>
             </div>
           ))}
@@ -222,10 +231,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
           {/* Add Stopover Button */}
           <div className="input-row add-stopover-row">
             <div className="input-marker add-marker">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
+              <BsPlus/>
             </div>
             <button className="add-stopover-btn" onClick={handleAddStopover}>
               {strings.search.addStopover}
@@ -258,9 +264,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
           {/* Swap Button */}
           {origin && destination && (
             <button className="swap-button" onClick={swapOriginDestination}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/>
-              </svg>
+              <BsArrowDownUp size={16}/>
             </button>
           )}
         </div>
@@ -272,9 +276,6 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
             {filteredSavedStops.length > 0 && (
               <div className="saved-stops-section">
                 <div className="saved-stops-header">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d={strings.productIcons.saved}/>
-                  </svg>
                   {strings.search.savedStops}
                 </div>
                 <ul className="suggestions-list saved">
@@ -313,18 +314,14 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
                     <span className="suggestion-name">{stop.name}</span>
                     {user && (
                       <button
-                        className={`save-stop-btn ${savedStopId === stop.id ? 'saved' : ''}`}
+                        className={`save-stop-btn ${isStopSaved(stop.id) ? 'saved' : ''}`}
                         onClick={(e) => handleSaveStop(e, stop)}
-                        title={savedStopId === stop.id ? strings.search.stopSaved : strings.search.saveStop}
+                        title={isStopSaved(stop.id) ? strings.search.stopSaved : strings.search.saveStop}
                       >
-                        {savedStopId === stop.id ? (
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
+                        {isStopSaved(stop.id) ? (
+                          <BsBookmarkFill size={16}/>
                         ) : (
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d={strings.productIcons.saved}/>
-                          </svg>
+                          <BsBookmark size={16} />
                         )}
                       </button>
                     )}
@@ -345,10 +342,7 @@ function SearchForm({ onSearch, user, savedStops = [] }) {
           disabled={!origin || !destination}
         >
           <span>{strings.search.search}</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
+          <BsSearch size={18}/>
         </button>
       </div>
     </div>
