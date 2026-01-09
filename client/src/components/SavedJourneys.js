@@ -204,7 +204,7 @@ function SavedJourneys({ onSelectJourney, user, onStopsChange }) {
         <>
           {activeTab === 'journeys' && (
             <div className="journeys-list">
-              {/* Journey Detail View */}
+              {/* Journey detail view */}
               {selectedJourney ? (
                 <div className="journey-detail-view">
                   <button className="back-to-list" onClick={() => setSelectedJourney(null)}>

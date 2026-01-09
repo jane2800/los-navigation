@@ -18,27 +18,25 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
   const [intermediateStops, setIntermediateStops] = useState([]);
   const [journeyComplete, setJourneyComplete] = useState(false);
   const [lastArrivalTime, setLastArrivalTime] = useState(null);
-  const [saveStatus, setSaveStatus] = useState(null); // null, 'saving', 'saved', 'unsaving'
+  const [saveStatus, setSaveStatus] = useState(null); 
   const [savedJourneyId, setSavedJourneyId] = useState(null); // Track saved journey ID for unsaving
 
   // Build the route including stopovers
-  // Stopovers now have structure: [{ stop: {id, name}, duration: 15 }, ...]
   const buildRoute = useCallback(() => {
     const route = [{ stop: origin, duration: 0 }]; // Origin has no wait duration
     if (stopovers && stopovers.length > 0) {
-      // Stopovers already have the correct structure
       route.push(...stopovers);
     }
     route.push({ stop: destination, duration: 0 }); // Destination has no wait duration
     return route;
   }, [origin, destination, stopovers]);
 
-  // Get the stop object from a route point (handles both old and new structure)
+  // Get the stop object from a route point
   const getStopFromRoutePoint = (routePoint) => {
     if (routePoint.stop) {
       return routePoint.stop;
     }
-    // Fallback for old structure (just the stop object)
+    // Fallback for old structure
     return routePoint;
   };
 
@@ -253,7 +251,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         destination_id: destination.id,
         destination_name: destination.name,
         stopovers: stopovers || [],
-        legs: selectedLegs, // Include the selected transport details
+        legs: selectedLegs, 
         userId: user.id
       });
       setSavedJourneyId(response.data.id); // Store the saved journey ID
@@ -286,6 +284,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
     }
   };
 
+  {/* Complete view of the journey */}
   if (journeyComplete) {
     return (
       <div className="journey-planner animate-fadeIn">
@@ -294,7 +293,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
           isComplete={true}
         />
         
-        {/* Save to Favorites - only shown when logged in */}
+        {/* Save only if user logged in */}
         {user ? (
           <button 
             className={`save-journey-btn ${saveStatus === 'saved' ? 'saved' : ''}`}
@@ -354,7 +353,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         />
       )}
 
-      {/* Current Leg Selection */}
+      {/* User can select current leg */}
       <div className="current-leg-card">
         <div className="leg-header">
           <div className="leg-number">{currentLegIndex + 1}</div>
@@ -390,7 +389,7 @@ function JourneyPlanner({ origin, destination, stopovers, onComplete, onBack, us
         )}
       </div>
 
-      {/* Footer Actions */}
+      {/* Back to planning journey and restart to home page */}
       <div className="journey-actions">
         <button className="back-journey-btn" onClick={onBack}>
           <BsArrowLeft size={20} />

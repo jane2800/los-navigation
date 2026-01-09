@@ -141,7 +141,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
     setDestination(temp);
   };
 
-  // Duration options in minutes
+  // Duration of stopover options in minutes
   const durationOptions = [5, 10, 15, 30, 45, 60, 90, 120];
 
   const formatDuration = (mins) => {
@@ -156,7 +156,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
     <div className="search-form animate-fadeIn">
       <div className="search-card">
         <div className="search-inputs">
-          {/* Origin Input */}
+          {/* Origin input */}
           <div className="input-row">
             <div className="input-marker origin-marker">A</div>
             <div 
@@ -202,7 +202,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
                 )}
               </div>
               
-              {/* Duration Selector */}
+              {/* Duration selector */}
               <div className="stopover-duration-wrapper">
                 <select
                   className="stopover-duration"
@@ -228,7 +228,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
             </div>
           ))}
 
-          {/* Add Stopover Button */}
+          {/* Add Stopover button */}
           <div className="input-row add-stopover-row">
             <div className="input-marker add-marker">
               <BsPlus/>
@@ -238,7 +238,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
             </button>
           </div>
 
-          {/* Destination Input */}
+          {/* Destination input */}
           <div className="input-row">
             <div className="input-marker destination-marker">B</div>
             <div 
@@ -261,7 +261,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
             </div>
           </div>
 
-          {/* Swap Button */}
+          {/* Swap button */}
           {origin && destination && (
             <button className="swap-button" onClick={swapOriginDestination}>
               <BsArrowDownUp size={16}/>
@@ -269,10 +269,10 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
           )}
         </div>
 
-        {/* Suggestions Dropdown */}
+        {/* Suggestions dropdown */}
         {activeInput && (
           <div className="suggestions-container">
-            {/* Saved Stops Section */}
+            {/* Shows saved stops section */}
             {filteredSavedStops.length > 0 && (
               <div className="saved-stops-section">
                 <div className="saved-stops-header">
@@ -335,7 +335,7 @@ function SearchForm({ onSearch, user, savedStops = [], onStopsChange }) {
           </div>
         )}
 
-        {/* Search Button */}
+        {/* Search button */}
         <button 
           className={`search-button ${origin && destination ? 'active' : ''}`}
           onClick={handleSearch}
